@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+    <head>
+        <title>HTML5 Drag'n'Drop Demo</title>
+        
+        <meta charset="utf-8">
+        <meta name=viewport content="width=device-width, initial-scale=1">
+
+        <style>
+            body {
+                color: #999;
+                background-color: #111;
+                /*text-align: center;*/
+                min-width: 1340px;
+                font-family: "calibri", sans-serif;
+
+            }
+
+            div#header {
+                border: 1px solid #222;
+                width: 1200px;
+                height: 100px;
+                z-index: 99;
+                background: #444;
+            }
+
+            div#main_container {
+                position: relative;
+            	width: 1340px;
+            	margin: 0px auto 0px auto;
+            }
+
+            div#hover_pos_container {
+                position: absolute;
+                border: 1px solid #288;
+                width: 768px;
+                height: 512px;
+            }
+
+            div.repo {
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                display: inline;
+                filter: brightness(0.7) saturate(0);
+            }
+
+            div.plain { top: 160px; left: 100px; }
+            div.church { top: 310px; left: 100px; }
+            div.tavern { top: 460px; left: 100px; }
+            div.townhall { top: 610px; left: 100px; }
+            
+            div.park1 { top: 160px; right: 100px; }
+            div.park2 { top: 310px; right: 100px; }
+            div.windmill { top: 460px; right: 100px; }
+            div.barn { top: 610px; right: 100px; }
+            
+            div.wood1 { top: 830px; left: 200px; }
+            div.wood2 { top: 830px; left: 400px; }
+            div.wood3 { top: 830px; left: 600px; }
+            div.wood4 { top: 830px; left: 800px; }
+            div.cabin { top: 830px; left: 1000px; }
+            
+            div.trash { top: 890px; left: 1220px;}
+            div.trash  img {width: 64px; height: 64px} 
+
+            div#grid_container {
+                position: relative;
+                padding: 0px 64px 120px 64px;
+                border: 1px solid #222;
+                margin-top: 20px;
+                margin-left: 220px;
+                width: 768px;
+                height: 512px;
+            }
+
+            div#note{
+                position: absolute;
+                top: 634px;
+                left: 260px;
+                color: #444;
+                font-size: 10pt;
+            }
+
+            div.grid_item {
+                position: relative;
+                max-width: 128px;
+                max-height: 128px;
+                width: 128px;
+                height: 128px;
+                float: left;
+            }
+
+            div.bg_img {
+                background-image: url("img/bg_tile_128.png");
+                background-repeat: no-repeat;
+                background-position: top;
+                background-position: 0px 32px; 
+            }
+
+            div.bg_img_hl {
+                background-image: url("img/bg_tile_128_hl.png");
+                background-repeat: no-repeat;
+                background-position: top;
+                background-position: 0px 32px; 
+            }
+
+            div.row0 .col2 {
+            	margin-top: 64px;
+            }
+
+            div.row1 .col1 {
+                margin-top: -64px;
+            }
+
+            div.row2 .col1 {
+               margin-top: -64px;
+            }
+
+            div.row0 {
+                position: absolute;
+                top: 170px;
+                height: 192px;
+            }
+
+            div.row1 {
+               position: absolute;
+                top: 362px;
+                height: 96px;
+            }
+
+            div.row2 {
+                position: absolute;
+                top: 490px;
+                height: 96px;
+            }
+
+            div.z1 {
+                z-index: 1;
+            }
+
+            div.z2 {
+                z-index: 2;
+            }
+
+            div.z3 {
+                z-index: 3;
+            }
+
+            div.z4 {
+                z-index: 4;
+            }
+
+            div.z5 {
+                z-index: 5;
+            }
+
+            div.z6 {
+                z-index: 6;
+            }
+
+            div.z7 {
+                z-index: 7;
+            }
+
+            div.z8 {
+                z-index: 8;
+            }
+
+            div.z9 {
+                z-index: 9;
+            }
+
+            div.z10 {
+                z-index: 10;
+            }
+
+            img.tile_odd {
+                position: relative;
+                bottom: 160px;
+                right: 64px;
+            }
+
+            img.tiles {
+                position: relative;
+                bottom: 160px;
+                right: 64px;
+                height: 150px;
+                z-index: 1;
+            }
+
+            .grey {
+			    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+			    /*filter: opacity(0.2);*/
+			    filter: brightness(0.2);
+			}
+
+            #control1 {
+                position: absolute;
+                top: 5px;
+                left: 300px;
+            }
+
+        </style>
+
+        
+
+    </head>
+
+    <body>
+
+        <div id="main_container">
+	        <div id="grid_container">
+	            
+                <div class="grid_row row0">
+                    <div class="grid_item col1 bg_img z1" id="drop1"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+    	            <div class="grid_item col2 bg_img z2" id="drop2"><!-- <img src="tile1.png" class="tile_even"> --></div>
+    	            <div class="grid_item col1 bg_img z1" id="drop3"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+    	            <div class="grid_item col2 bg_img z2" id="drop4"><!-- <img src="tile1.png" class="tile_even"> --></div>
+    	            <div class="grid_item col1 bg_img z1" id="drop5"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+    	            <div class="grid_item col2 bg_img z2" id="drop6"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                </div>
+                <div class="grid_row row1">
+                    <div class="grid_item col1 bg_img z3" id="drop7"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z4" id="drop8"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                    <div class="grid_item col1 bg_img z3" id="drop9"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z4" id="drop10"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                    <div class="grid_item col1 bg_img z3" id="drop11"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z4" id="drop12"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                </div>
+                <div class="grid_row row2">
+                    <div class="grid_item col1 bg_img z5" id="drop13"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z6" id="drop14"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                    <div class="grid_item col1 bg_img z5" id="drop15"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z6" id="drop16"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                    <div class="grid_item col1 bg_img z5" id="drop17"><!-- <img src="tile1.png" class="tile_odd"> --></div>
+                    <div class="grid_item col2 bg_img z6" id="drop18"><!-- <img src="tile1.png" class="tile_even"> --></div>
+                </div>
+
+                <div id="note">Für eine vergrößerte Darstellung mit der Maus die Baufläche verlassen!</div>
+	            
+	        </div>
+
+            <!-- Left Repo -->
+            <div class="repo plain">
+                <img src="img/wiese_256.png" class="tiles" draggable="true" id="drag1">
+            </div>
+            <div class="repo church" id='churchRepo'>
+                <img src="img/kirche_256.png" class="tiles" draggable="true" id="drag2">
+            </div>
+            <div class="repo tavern">
+                <img src="img/wirtshaus_256.png" class="tiles" draggable="true" id="drag3">
+            </div>
+            <div class="repo townhall">    
+                <img src="img/stadthaus_256.png" class="tiles" draggable="true" id="drag4">
+            </div>
+            
+            <!-- Right Repo -->
+            <div class="repo park1">
+                <img src="img/park1_256.png" class="tiles" draggable="true" id="drag5">
+            </div>
+            <div class="repo park2" id='churchRepo'>
+                <img src="img/park2_256.png" class="tiles" draggable="true" id="drag6">
+            </div>
+            <div class="repo windmill">
+                <img src="img/muehle_256.png" class="tiles" draggable="true" id="drag7">
+            </div>
+            <div class="repo barn">    
+                <img src="img/scheune_256.png" class="tiles" draggable="true" id="drag8">
+            </div>
+
+            <!-- Bottom Repo -->
+            <div class="repo wood1">
+                <img src="img/wald1_256.png" class="tiles" draggable="true" id="drag9">
+            </div>
+            <div class="repo wood2" id='churchRepo'>
+                <img src="img/wald2_256.png" class="tiles" draggable="true" id="drag10">
+            </div>
+            <div class="repo wood3">
+                <img src="img/wald3_256.png" class="tiles" draggable="true" id="drag11">
+            </div>
+            <div class="repo wood4">    
+                <img src="img/wald4_256.png" class="tiles" draggable="true" id="drag12">
+            </div>
+            <div class="repo cabin">    
+                <img src="img/waldhaus_256.png" class="tiles" draggable="true" id="drag13">
+            </div>
+            <div class="repo trash">    
+                <img src="img/trash.png" class="tiles" class="tiles" id="trash">
+            </div>
+        </div>
+   </body>
+
+   <script>
+
+		var gridItem = document.getElementsByClassName('grid_item');
+
+		for (var i = 0; i < gridItem.length; i++) {
+			gridItem[i].addEventListener('dragover', allowDrop, true);
+			gridItem[i].addEventListener('drop', drop, true);
+			gridItem[i].addEventListener('dragleave', noDrop, true);
+		}
+
+        var tiles = document.getElementsByClassName('tiles');
+        for (var i = 0; i < tiles.length; i++) {
+            tiles[i].addEventListener('mouseover', mouseOverTile, true);
+            tiles[i].addEventListener('mouseout', mouseOutOfTile, true);
+            tiles[i].addEventListener('dragstart', drag, true);
+            tiles[i].addEventListener('dragleave', noDrop, true);
+        }
+
+        var grid = document.getElementById('grid_container');
+        grid.addEventListener('mouseover', mouseOverGrid, true);
+        grid.addEventListener('mouseout', mouseOutOfGrid, true);
+
+        var trash = document.getElementById('trash');
+        trash.addEventListener('dragover', allowDrop, true);
+        trash.addEventListener('drop', drop, true);
+        trash.addEventListener('dragleave', noDrop, true);
+
+        function mouseOverTile(ev) {
+            ev = ev || window.event;
+            document.body.style.cursor = 'move';
+        }
+
+        function mouseOutOfTile(ev) {
+            ev = ev || window.event;
+            document.body.style.cursor = 'default';
+        }
+
+        function  mouseOutOfGrid(ev) {
+            ev = ev || window.event;
+            bigTiles(tiles);
+        }
+        
+        function mouseOverGrid(ev) {
+            ev = ev || window.event;
+            smallTiles(tiles);
+        }
+
+        var zIndexInterim = 0;
+        var interimsObj;
+        var dragObj;
+        var idCount = 100;
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            
+            if (ev.target.classList[0] != 'repo') {
+                ev.target.classList.remove('bg_img');
+                ev.target.classList.add('bg_img_hl');
+            }
+        }
+
+        function noDrop(ev) {
+        	ev.preventDefault();
+
+            if (ev.target.classList[0] != 'repo') {
+                ev.target.classList.remove('bg_img_hl');
+                ev.target.classList.add('bg_img');
+        	}
+        }
+
+        function drag(ev) { 
+            // console.log('drag');
+            ev.dataTransfer.setData("text", ev.target.id);
+            // document.body.style.cursor = 'move';
+
+            interimsObj = ev.target.parentElement;
+            dragObj = ev.target;
+
+            if (ev.target.parentElement.classList[0] != 'repo')
+                ev.target.parentElement.classList.add('bg_img');
+
+            smallTiles(tiles);
+        }
+
+        function drop(ev) {
+            try {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                ev.target.appendChild(document.getElementById(data));
+                // alert(ev.target.id);
+                if (ev.target.id != 'trash') {
+                    var element = window.getComputedStyle(document.getElementById(ev.target.id));
+                    document.getElementById(ev.target.children[0].id).style.zIndex = element.getPropertyValue('z-index');
+                    
+                    removeEvents(ev.target);
+                }
+                
+                addEvents(interimsObj);
+                
+                ev.target.classList.remove('bg_img_hl');
+
+                if (interimsObj.classList[0] == 'repo' && interimsObj.children.length < 1) {
+                    idCount++;
+                    
+                    var newObj = document.createElement('img');;
+                    newObj.src = dragObj.src;
+                    newObj.className = 'tiles';
+                    newObj.id = dragObj.id.substr(0, 4) + idCount;
+                    newObj.draggable = 'true';
+                    newObj.addEventListener('dragstart', drag, true);
+                    newObj.addEventListener('dragleave', noDrop, true);
+                    newObj.addEventListener('mouseover', mouseOverTile, true);
+                    newObj.addEventListener('mouseout', mouseOutOfTile, true);
+                    
+                    interimsObj.appendChild(newObj)
+                }
+
+            } catch(err) {
+                console.warn(err);
+            }
+
+        }
+
+        function removeEvents(obj) {
+            obj.removeEventListener('drop', drop, true);
+            obj.removeEventListener('dragover', allowDrop, true);
+            obj.removeEventListener('dragleave', noDrop, true);
+        }
+
+        function addEvents(obj) {
+            obj.addEventListener('drop', drop, true);
+            obj.addEventListener('dragover', allowDrop, true);
+            obj.addEventListener('dragleave', noDrop, true);
+        }
+
+        function smallTiles(t) {
+            for (var i = 0; i < t.length; i++) {
+
+                if (t[i].parentElement.classList[0] != 'repo') {
+                    
+                    t[i].style.width = '128px';
+                    t[i].style.height = '150px';
+                    t[i].style.right = '0px';
+                    t[i].style.bottom = '40px';
+                }
+            }
+        }
+
+        function bigTiles(t) {
+            for (var i = 0; i < t.length; i++) {
+
+                if (t[i].parentElement.classList[0] != 'repo') {
+                    t[i].style.width = '256px';
+                    t[i].style.height = '300px';
+                    t[i].style.right = '64px';
+                    t[i].style.bottom = '160px';
+                }
+            }
+        }
+
+    </script>
+</html>
