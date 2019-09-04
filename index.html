@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="de-DE">
+
+<html lang="en-US">
 
     <head>
         <title>HTML5 Drag'n'Drop Demo</title>
@@ -9,20 +10,19 @@
 
         <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />
         <script src="js/es6-promise.auto.min.js"></script>
-        <script src="js/html2canvas.min.js"></script>
+        <script src="js/html2canvas.js"></script>
         <script src="js/script.js"></script>
     </head>
 
     <body>
         <div id="side">
-            <div id="repo_wrapper">
-                <div id="repo"></div>
-            </div>
-            <div id="grasp"><span>Baumenü</span></div>
+            <div id="repo_wrapper"></div>
+            <div id="grasp_a" class="grasp" style="top:100px;" directory_name="tiles" tile_count="24"><span>Häuser</span></div>
+            <div id="grasp_b" class="grasp" style="top:250px;" directory_name="tiles_x" tile_count="16"><span>Straßen</span></div>
+            <div id="grasp_c" class="grasp" style="top:400px;" directory_name="trees" tile_count="14"><span>Bäume</span></div>
             <img src="img/up.png" id="up_arrow">
             <img src="img/down.png" id="down_arrow">
         </div>
-
         <div id="main" class="helper">
             <div id="sc_select_container2">
                 <fieldset id="fieldset">
@@ -40,10 +40,12 @@
 
             <div id="grid_container">
                 <div id="note"> Für eine korrekte Darstellung: mit der Maus die Baufläche verlassen!</div>
+                <!-- <img src="img/trash.png" class="tiles" id="trash"> -->
             </div>
         </div>
 
         <div id="sc_container"><p>(Rechtsklick ... Bild speichern unter!) <button id="back_button">zurück</button>  <span>&larr; Hier gehts zurück. (Browser-Zurück-Knopf löscht den Baufortschritt!)</span></p></div>
-    </body>    
+   </body>
 
+    
 </html>
