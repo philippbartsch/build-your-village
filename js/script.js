@@ -1,7 +1,7 @@
 if (document.addEventListener)
     document.addEventListener('DOMContentLoaded', init, true);
 else if (document.attachEvent)
-      document.attachEvent('onDOMContentLoaded', init);
+      document.attachEvent("on"+evnt, init);
 
 function init(){ 
 
@@ -199,26 +199,75 @@ function init(){
     main.addEventListener('drop', dropMain, true);
     main.addEventListener('dragleave', noDropMain, true);
 
-    var grasp = document.querySelector("#grasp");
     var grasp2 = document.querySelector("#grasp2");
-    var repo = document.querySelector("#repo");
     var trash = document.querySelector("#trash");
+    var repo_wrapper = document.querySelector("#repo_wrapper");
+
+    var allGrasps = document.getElementsByClassName("grasp");
+    
+    var showRep = function(selectGrasp) {
+        if (selectGrasp.repo.style.display == "block") {
+            //Hide
+            side.style.marginLeft = "-150px";
+            main.style.marginLeft = "0px";
+            for (var i = 0; i < allGrasps.length; i++) {
+                allGrasps[i].style["background-color"] = "#2a2a2a";
+                allGrasps[i].repo.style.display = "none";
+            }
+        } else {
+            //Show
+            for (var i = 0; i < allGrasps.length; i++) {
+                if (allGridItems[i] != selectGrasp) {
+                    allGrasps[i].repo.style.display = "none";
+                    allGrasps[i].style["background-color"] = "#2a2a2a";
+                }
+            }
+            selectGrasp.repo.style.display = "block";
+            selectGrasp.style["background-color"] = "#4a4a4a";
+            side.style.marginLeft = "0px";
+            main.style.marginLeft = "150px";
+        }		
+    };
+
+    function intToString(number) {
+        if (number <= 9)
+            return '0' + number;
+        else
+            return '' + number;
+    }
+    
+    function initRepo(repo, directory_name, img_count) {
+        for (var i = 0; i < img_count; i++) {
+
+            var repoItem = document.createElement('div');
+            repoItem.className = 'repo_item';
+            
+            var tile = document.createElement('img');
+            tile.src = 'img/' + directory_name + '/tile_' + intToString(i + 1) + '.png';
+            tile.id = 'drag' + directory_name + (i + 1);
+            tile.className = 'tiles';
+            
+            tile.draggable = true;
+
+            repo.appendChild(repoItem);
+            repoItem.appendChild(tile);
+        }
+    }
+
+    for (var i = 0; i < allGrasps.length; i++) {
+        var grasp = allGrasps[i];
+        grasp.repo = document.createElement("div"); 
+        grasp.repo.className = "repo";
+        grasp.repo.style.display = "none";
+        repo_wrapper.appendChild(grasp.repo);
+        grasp.addEventListener("click", function(ev) { showRep(ev.currentTarget); }, false);
+        initRepo(grasp.repo, grasp.attributes["directory_name"].value, parseInt(grasp.attributes["tile_count"].value));
+    }    
 
     var lefttrigger = false;
 
     var width = window.innerWidth;
-
-    grasp.addEventListener("click", function() {
-
-        if (side.style.marginLeft == '0px') {
-            side.style.marginLeft      = "-150px";
-            main.style.marginLeft = "0px";
-          } else {
-            side.style.marginLeft      = "0px";
-            main.style.marginLeft = "150px";
-        }
-    }, false);
-
+		
     grasp2.addEventListener("click", function() {
 
         if (sc_select_container2.style.marginTop == '0px')
@@ -280,35 +329,6 @@ function init(){
     }
 
     initGrid(grid);
-
-    function initRepo(repo) {
-        
-        for (var i = 0; i < 38; i++) {
-
-            var repoItem = document.createElement('div');
-            repoItem.className = 'repo_item';
-
-            
-            var tile = document.createElement('img');
-
-            if (i < 9)
-                tile.src = 'img/tiles/tile_0' + (i + 1) + '.png';
-            else
-                tile.src = 'img/tiles/tile_' + (i + 1) + '.png';
-
-            tile.id = 'drag' + (i + 1);
-            tile.className = 'tiles';
-            
-            tile.draggable = true;
-
-
-            repo.appendChild(repoItem);
-            repoItem.appendChild(tile);
-        }
-    }
-
-    initRepo(repo);
-
 
     var scCon = document.getElementById('sc_container');
     var scButton = document.getElementById('sc_button');
